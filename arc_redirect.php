@@ -33,6 +33,9 @@ register_callback('arc_redirect_tab', 'arc_redirect');
 function arc_redirect($event, $step) {
   $url = PROTOCOL.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
   
+  // Strip final slash from url
+  if (substr($url,-1)=='/') { $url = substr($url, 0, -1); }
+  
   $sql = "SELECT redirectUrl FROM ".PFX."arc_redirect WHERE originalUrl = '".$url."';";
   $rs = safe_query($sql); $redirect = nextRow($rs);
 
@@ -148,6 +151,11 @@ function arc_redirect_add() {
     return;
   }
   
+  // Strip final slash from original url
+  if (substr($originalUrl,-1)=='/') {
+    $originalUrl = substr($originalUrl, 0, -1);
+  }
+  
   $q = safe_insert("arc_redirect",
     "originalUrl = '".trim($originalUrl)."', redirectUrl = '".trim($redirectUrl)."'"
   );
@@ -173,6 +181,11 @@ function arc_redirect_save() {
   if ($originalUrl == '' || $redirectUrl == '') {
     arc_redirect_edit('Unable to save redirect');
     return;
+  }
+    
+  // Strip final slash from original url
+  if (substr($originalUrl,-1)=='/') {
+    $originalUrl = substr($originalUrl, 0, -1);
   }
   
   $rs = safe_update("arc_redirect",
