@@ -59,6 +59,7 @@ function arc_redirect_tab($event, $step) {
     case 'add': arc_redirect_add(); break;
     case 'save': arc_redirect_save(); break;
     case 'edit': arc_redirect_edit(); break;
+    case 'arc_redirect_multi_edit': arc_redirect_multiedit(); break;
     default: arc_redirect_list();
   }
 }
@@ -87,6 +88,7 @@ function arc_redirect_list($message = '') {
   , 'margin-bottom:25px');
   
   // Add a list of existing redirects
+  $html .= n.n.'<form action="index.php" id="arc_redirect_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">';
   $html .= startTable('list');
   
   $html .= tr(
@@ -105,10 +107,18 @@ function arc_redirect_list($message = '') {
       .td("<ul><li class='action-edit'>$editLink</li><li class='action-view'>$redirectLink</li></ul>", 35, 'actions')
       .td($redirect['originalUrl'], 175)
       .td($redirect['redirectUrl'], 175)
+      .td(fInput('checkbox', 'selected[]', $redirect['arc_redirectID']), '', 'multi-edit')
     );
   }
   
+  $html .= n.'<tfoot>'.tr(
+      tda(select_buttons()
+      .event_multiedit_form('arc_redirect', array('delete'=>gTxt('delete')),1,'','','',''),
+      ' class="multi-edit" colspan="5" style="text-align:right;border:none"')
+    ).n.'</tfoot>';
+  
   $html .= endTable();
+  $html .= '</form>';
   
   echo $html;
   
@@ -201,6 +211,34 @@ function arc_redirect_save() {
     $message = gTxt('Redirect updated');
     arc_redirect_list($message);
   }
+}
+
+function arc_redirect_multiedit() {
+  $selected = ps('selected');
+  
+  if (!$selected || !is_array($selected)) {
+    arc_redirect_list();
+    return;
+  }
+  
+  $method = ps('edit_method');
+  $changed = array();
+  
+  $message = '';
+  
+  switch ($method) {
+    case 'delete':
+      
+      foreach ($selected as $id) {
+        if (safe_delete('arc_redirect', 'arc_redirectID = '.$id)) {
+          $changed[] = $id;
+        }
+      }
+      $message = count($changed).' redirects deleted';
+      break;
+  }
+  
+  arc_redirect_list($message);
 }
 
 // Installation function - builds MySQL table
