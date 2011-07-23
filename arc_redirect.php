@@ -96,9 +96,10 @@ function arc_redirect_list($message = '') {
   while ($redirect = nextRow($rs)) {
     $editLink = href(gTxt('edit'),
       '?event=arc_redirect&amp;step=edit&amp;id='.$redirect['arc_redirectID']);
+    $redirectLink = href('Test',$redirect['originalUrl']);
     $html .= tr(
       td($redirect['arc_redirectID'], 20, 'id')
-      .td("<ul><li class='action-edit'>$editLink</li></ul>", 35, 'actions')
+      .td("<ul><li class='action-edit'>$editLink</li><li class='action-view'>$redirectLink</li></ul>", 35, 'actions')
       .td($redirect['originalUrl'], 175)
       .td($redirect['redirectUrl'], 175)
     );
