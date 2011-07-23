@@ -65,9 +65,26 @@ function arc_redirect_list($message = '') {
   pagetop('arc_redirect',$message);
 
   $sql = "SELECT * FROM ".PFX."arc_redirect;";
-  $rs = safe_query($sql);
+  $rs = safe_query($sql);  
   
-  $html = startTable('edit');
+  // Include a quick add form
+  $html = form(
+    startTable('edit')
+      .tr(
+        tda(tag('Original URL','label', ' for="originalUrl"'),' style="vertical-align:middle"')
+        .td(fInput('text','originalUrl','','edit','','','','','originalUrl'))
+      ).tr(
+        tda(tag('Redirect URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
+        .td(fInput('text','redirectUrl','','edit','','','','','redirectUrl')
+        .eInput('arc_redirect')
+        .sInput('add').'&nbsp;'.fInput('submit','add',gTxt('Add'),'publish')
+        )
+      )  
+    .endTable()
+  , 'margin-bottom:25px');
+  
+  // Add a list of existing redirects
+  $html .= startTable('edit');
   
   $html .= tr(
     hCell ('ID#')
