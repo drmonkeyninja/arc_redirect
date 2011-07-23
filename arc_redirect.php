@@ -124,21 +124,25 @@ function arc_redirect_edit($message='') {
     $rs = safe_row('originalUrl,redirectUrl', 'arc_redirect', "arc_redirectID = $id");
     extract($rs);
   }
-  
-  echo startTable('edit').tr(td(
-  
-    form(
-      tag(tag('Original URL','label', ' for="originalUrl"')
-      .fInput('text','originalUrl',$originalUrl,'edit','','','','','originalUrl'),'p')
-      .tag(tag('Redirect URL','label', ' for="redirectUrl"')
-      .fInput('text','redirectUrl',$redirectUrl,'edit','','','','','redirectUrl'),'p')
-      .eInput('arc_redirect')
-      .(($id)?
+    
+  $html = form(
+    startTable('edit')
+      .tr(
+        tda(tag('Original URL','label', ' for="originalUrl"'),' style="vertical-align:middle"')
+        .td(fInput('text','originalUrl',$originalUrl,'edit','','','','','originalUrl'))
+      ).tr(
+        tda(tag('Redirect URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
+        .td(fInput('text','redirectUrl',$redirectUrl,'edit','','','','','redirectUrl')
+        .eInput('arc_redirect').'&nbsp;'
+        .(($id)?
         sInput('save').hInput('id',$id).fInput('submit','save',gTxt('Save'),'publish')
-        :sInput('add').fInput('submit','add',gTxt('Add'),'publish')
-      ).br
-    )
-  )).endTable();
+          :sInput('add').fInput('submit','add',gTxt('Add'),'publish')
+        ))
+      )  
+    .endTable()
+  );
+  
+  echo $html;
   
 }
 
