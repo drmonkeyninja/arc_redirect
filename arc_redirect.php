@@ -84,7 +84,7 @@ function arc_redirect_list($message = '') {
   , 'margin-bottom:25px');
   
   // Add a list of existing redirects
-  $html .= startTable('edit');
+  $html .= startTable('list');
   
   $html .= tr(
     hCell ('ID#')
