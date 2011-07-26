@@ -92,10 +92,11 @@ function arc_redirect_list($message = '') {
   $html .= startTable('list');
   
   $html .= tr(
-    hCell ('ID#')
-    .hCell ()
-    .hCell ('Original URL')
-    .hCell ('Redirect URL')
+    hCell('ID#')
+    .hCell()
+    .hCell('Original URL')
+    .hCell('Redirect URL')
+    .hCell()
   );
   
   while ($redirect = nextRow($rs)) {
