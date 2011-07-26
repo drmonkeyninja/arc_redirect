@@ -273,6 +273,38 @@ if (0) {
 <!--
 # --- BEGIN PLUGIN HELP ---
 
+h1(title). arc_redirect (love redirects, hate 404s)
+
+If you're in the process of restructuring a Textpattern site, then this is the plugin for you!
+
+Requirements:-
+
+* Textpattern 4.2+
+
+
+h2(section). Author
+
+"Andy Carter":http://redhotchilliproject.com. For other Textpattern plugins by me visit my "Plugins page":http://redhotchilliproject.com/txp.
+
+Thanks to "Oliver Ker":http://oliverker.co.uk/ for giving me the idea for this plugin.
+
+
+h2(section). Installation / Uninstallation
+
+To install go to the 'plugins' tab under 'admin' and paste the plugin code into the 'Install plugin' box, 'upload' and then 'install'. Finally activate the plugin.
+
+To uninstall %(tag)arc_redirect% simply delete the plugin from the 'Plugins' tab.  This will remove the plugin code and drop the %(tag)arc_redirect% table from your Textpattern database.
+
+h2(section). Usage
+
+%(tag)arc_redirect% adds a new tab under 'Extensions' from where you can define pairs of URLs for handling redirects. Basically provide an original URL on your Textpattern site that is generating a 404, "page not found", error and a redirect URL. Then whenever someone goes to the original URL rather than get the standard 404 error page they will be redircted to the new URL (with a 301 permenantely moved).
+
+The original URL must produce a 404 page in Textpattern on the site this plugin is installed.
+
+* %(tag)arc_redirect% treats http://www.example.com/missing the same as http://www.example.com/missing/
+* %(tag)arc_redirect% does not treat http://example.com/missing and http://www.example.com/missing as the same URL
+
+
 # --- END PLUGIN HELP ---
 -->
 <?php
