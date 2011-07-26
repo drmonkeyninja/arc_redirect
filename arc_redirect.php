@@ -67,7 +67,7 @@ function arc_redirect_tab($event, $step) {
 
 function arc_redirect_list($message = '') {
 
-  global $event,$link_list_pageby;
+  global $event;
   
   extract(gpsa(array('page')));
 
@@ -77,7 +77,7 @@ function arc_redirect_list($message = '') {
   
   $total = getCount('arc_redirect', $criteria);
   
-  $limit = max($link_list_pageby, 15);
+  $limit = 25;
   list($page, $offset, $numPages) = pager($total, $limit, $page);
   
   $sort_sql = 'arc_redirectID desc';
@@ -137,7 +137,7 @@ function arc_redirect_list($message = '') {
   
   $html .= n.'<div id="'.$event.'_navigation" class="txp-navigation">'
     .n.nav_form('arc_redirect', $page, $numPages, '', '', '', '', $total, $limit)
-    .pageby_form('arc_redirect', $link_list_pageby).n.'</div>';
+    .n.'</div>';
   
   echo $html;
   
