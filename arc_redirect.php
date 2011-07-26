@@ -60,16 +60,30 @@ function arc_redirect_tab($event, $step) {
     case 'save': arc_redirect_save(); break;
     case 'edit': arc_redirect_edit(); break;
     case 'arc_redirect_multi_edit': arc_redirect_multiedit(); break;
+    case 'arc_redirect_change_pageby': event_change_pageby('arc_redirect');
     default: arc_redirect_list();
   }
 }
 
 function arc_redirect_list($message = '') {
 
-  pagetop('arc_redirect',$message);
+  global $event,$link_list_pageby;
+  
+  extract(gpsa(array('page')));
 
-  $sql = "SELECT * FROM ".PFX."arc_redirect;";
-  $rs = safe_query($sql);  
+  pagetop('arc_redirect',$message);
+  
+  $criteria = 1;
+  
+  $total = getCount('arc_redirect', $criteria);
+  
+  $limit = max($link_list_pageby, 15);
+  list($page, $offset, $numPages) = pager($total, $limit, $page);
+  
+  $sort_sql = 'arc_redirectID desc';
+    
+  $rs = safe_rows_start('*', 'arc_redirect', "$criteria order by $sort_sql limit $offset, $limit");
+
   
   // Include a quick add form
   $html = form(
@@ -120,6 +134,10 @@ function arc_redirect_list($message = '') {
   
   $html .= endTable();
   $html .= '</form>';
+  
+  $html .= n.'<div id="'.$event.'_navigation" class="txp-navigation">'
+    .n.nav_form('arc_redirect', $page, $numPages, '', '', '', '', $total, $limit)
+    .pageby_form('arc_redirect', $link_list_pageby).n.'</div>';
   
   echo $html;
   
