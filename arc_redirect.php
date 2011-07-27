@@ -60,7 +60,6 @@ function arc_redirect_tab($event, $step) {
     case 'save': arc_redirect_save(); break;
     case 'edit': arc_redirect_edit(); break;
     case 'arc_redirect_multi_edit': arc_redirect_multiedit(); break;
-    case 'arc_redirect_change_pageby': event_change_pageby('arc_redirect');
     default: arc_redirect_list();
   }
 }
