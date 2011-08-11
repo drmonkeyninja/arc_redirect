@@ -88,10 +88,10 @@ function arc_redirect_list($message = '') {
   $html = form(
     startTable('edit')
       .tr(
-        tda(tag('Original URL','label', ' for="originalUrl"'),' style="vertical-align:middle"')
+        tda(tag('Redirect from URL (produces 404 page)','label', ' for="originalUrl"'),' style="vertical-align:middle"')
         .td(fInput('text','originalUrl','','edit','','','','','originalUrl'))
       ).tr(
-        tda(tag('Redirect URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
+        tda(tag('Redirect to URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
         .td(fInput('text','redirectUrl','','edit','','','','','redirectUrl')
         .eInput('arc_redirect')
         .sInput('add').'&nbsp;'.fInput('submit','add',gTxt('Add'),'publish')
@@ -156,10 +156,10 @@ function arc_redirect_edit($message='') {
   $html = form(
     startTable('edit')
       .tr(
-        tda(tag('Original URL','label', ' for="originalUrl"'),' style="vertical-align:middle"')
+        tda(tag('Redirect from URL (produces 404 page)','label', ' for="originalUrl"'),' style="vertical-align:middle"')
         .td(fInput('text','originalUrl',$originalUrl,'edit','','','','','originalUrl'))
       ).tr(
-        tda(tag('Redirect URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
+        tda(tag('Redirect to URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
         .td(fInput('text','redirectUrl',$redirectUrl,'edit','','','','','redirectUrl')
         .eInput('arc_redirect').'&nbsp;'
         .(($id)?
@@ -316,7 +316,7 @@ h2(section). Usage
 
 %(tag)arc_redirect% adds a new tab under 'Extensions' from where you can define pairs of URLs for handling redirects. Basically provide an original URL on your Textpattern site that is generating a 404, "page not found", error and a redirect URL. Then whenever someone goes to the original URL rather than get the standard 404 error page they will be redircted to the new URL (with a 301 permenantely moved).
 
-The original URL must produce a 404 page in Textpattern on the site this plugin is installed.
+The redirect from URL must produce a 404 page in Textpattern on the site this plugin is installed.
 
 * %(tag)arc_redirect% treats http://www.example.com/missing the same as http://www.example.com/missing/
 * %(tag)arc_redirect% does not treat http://example.com/missing and http://www.example.com/missing as the same URL
