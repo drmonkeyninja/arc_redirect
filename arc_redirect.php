@@ -38,10 +38,9 @@ function arc_redirect($event, $step) {
   
   $url = doSlash($url);
   
-  $sql = "SELECT redirectUrl FROM ".PFX."arc_redirect WHERE originalUrl = '".$url."';";
-  $rs = safe_query($sql); $redirect = nextRow($rs);
+  $redirect = safe_row('redirectUrl', 'arc_redirect', "originalUrl = '$url'");
 
-	  if ($redirect['redirectUrl']) {
+	  if (isset($redirect['redirectUrl'])) {
 		  ob_end_clean();
 
 		  header("Status: 301");
