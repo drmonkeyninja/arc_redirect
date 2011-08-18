@@ -150,6 +150,7 @@ function arc_redirect_edit($message='') {
   $redirectUrl = gps('redirectUrl');
   
   if ($id=gps('id')) {
+    $id = doSlash($id);
     $rs = safe_row('originalUrl,redirectUrl', 'arc_redirect', "arc_redirectID = $id");
     extract($rs);
   }
@@ -249,6 +250,7 @@ function arc_redirect_multiedit() {
     case 'delete':
       
       foreach ($selected as $id) {
+        $id = doSlash($id);
         if (safe_delete('arc_redirect', 'arc_redirectID = '.$id)) {
           $changed[] = $id;
         }
