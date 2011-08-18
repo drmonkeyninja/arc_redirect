@@ -218,12 +218,12 @@ function arc_redirect_save() {
   }
     
   // Strip final slash from original url
-  if (substr($originalUrl,-1)=='/') {
-    $originalUrl = substr($originalUrl, 0, -1);
-  }
+  $originalUrl = rtrim($originalUrl, '/');
+  
+  $id = doSlash($id);
   
   $rs = safe_update("arc_redirect",
-    "originalUrl    = '".trim($originalUrl)."',  redirectUrl = '".trim($redirectUrl)."'",
+    "originalUrl    = '".trim(doSlash($originalUrl))."',  redirectUrl = '".trim(doSlash($redirectUrl))."'",
     "arc_redirectID = $id"
   );
   
@@ -269,8 +269,8 @@ function arc_redirect_install()
   // For first install, create table for tweets
   $sql = "CREATE TABLE IF NOT EXISTS ".PFX."arc_redirect ";
   $sql.= "(arc_redirectID INTEGER AUTO_INCREMENT PRIMARY KEY,
-    originalUrl VARCHAR(240),
-    redirectUrl VARCHAR(240));";
+    originalUrl VARCHAR(255),
+    redirectUrl VARCHAR(255));";
 
   if (!safe_query($sql)) {
     return 'Error - unable to create arc_redirect table';
