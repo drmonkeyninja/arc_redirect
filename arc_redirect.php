@@ -186,12 +186,10 @@ function arc_redirect_add() {
   }
   
   // Strip final slash from original url
-  if (substr($originalUrl,-1)=='/') {
-    $originalUrl = substr($originalUrl, 0, -1);
-  }
+  $originalUrl = rtrim($originalUrl, '/');
   
   $q = safe_insert("arc_redirect",
-    "originalUrl = '".trim($originalUrl)."', redirectUrl = '".trim($redirectUrl)."'"
+    "originalUrl = '".trim(doSlash($originalUrl))."', redirectUrl = '".trim(doSlash($redirectUrl))."'"
   );
   
   $GLOBALS['ID'] = mysql_insert_id();
