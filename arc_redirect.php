@@ -34,7 +34,9 @@ function arc_redirect($event, $step) {
   $url = PROTOCOL.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
   
   // Strip final slash from url
-  if (substr($url,-1)=='/') { $url = substr($url, 0, -1); }
+  $url = rtrim($url, '/');
+  
+  $url = doSlash($url);
   
   $sql = "SELECT redirectUrl FROM ".PFX."arc_redirect WHERE originalUrl = '".$url."';";
   $rs = safe_query($sql); $redirect = nextRow($rs);
