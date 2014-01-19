@@ -86,20 +86,13 @@ function arc_redirect_list($message = '') {
 
   $html = "<h1 class='txp-heading'>arc_redirect</h1>";
   // Include a quick add form
-  $html .= form(
-    startTable('edit')
-      .tr(
-        tda(tag('Redirect from URL (produces 404 page)','label', ' for="originalUrl"'),' style="vertical-align:middle"')
-        .td(fInput('text','originalUrl','','edit','','','','','originalUrl'))
-      ).tr(
-        tda(tag('Redirect to URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
-        .td(fInput('text','redirectUrl','','edit','','','','','redirectUrl')
-        .eInput('arc_redirect')
-        .sInput('add').'&nbsp;'.fInput('submit','add',gTxt('Add'),'publish')
-        )
-      )  
-    .endTable()
-  , 'margin-bottom:25px');
+  $form = "<p><span class='edit-label'><label for='originalUrl'>Redirect from URL (produces 404 page)</label></span>";
+  $form .= "<span class='edit-value'>" . fInput('text', 'originalUrl', '', '', '', '', '', '', 'originalUrl') . "</span></p>";
+  $form .= "<p><span class='edit-label'><label for='redirectUrl'>Redirect to URL</label></span>";
+  $form .= "<span class='edit-value'>" . fInput('text', 'redirectUrl', '', '', '', '', '', '', 'redirectUrl') . '&nbsp;' . fInput('submit', 'add', gTxt('Add')) . "</span></p>";
+
+  $form .= eInput('arc_redirect').sInput('add');
+  $html .= form("<div class='plugin-column'>" . $form . "</div>", " class='edit-form'");
   
   // Add a list of existing redirects
   $html .= n.n.'<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
