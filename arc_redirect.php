@@ -146,23 +146,27 @@ function arc_redirect_edit($message='') {
     $rs = safe_row('originalUrl,redirectUrl', 'arc_redirect', "arc_redirectID = $id");
     extract($rs);
   }
-    
-  $html = form(
-    startTable('edit')
-      .tr(
-        tda(tag('Redirect from URL (produces 404 page)','label', ' for="originalUrl"'),' style="vertical-align:middle"')
-        .td(fInput('text','originalUrl',$originalUrl,'edit','','','','','originalUrl'))
-      ).tr(
-        tda(tag('Redirect to URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
-        .td(fInput('text','redirectUrl',$redirectUrl,'edit','','','','','redirectUrl')
-        .eInput('arc_redirect').'&nbsp;'
-        .(($id)?
-        sInput('save').hInput('id',$id).fInput('submit','save',gTxt('Save'),'publish')
-          :sInput('add').fInput('submit','add',gTxt('Add'),'publish')
-        ))
-      )  
-    .endTable()
+
+  $html = "<h1 class='txp-heading'>arc_redirect</h1>";
+  $form = '<h2>' . ($id ? 'Edit' : 'Add') . ' Redirect</h2>';
+  $fields = array(
+    'originalUrl' => 'Redirect from URL',
+    'redirectUrl' => 'Redirect to URL'
   );
+  foreach ($fields as $key => $label) {
+    $form .= "<p class='$key'><span class='edit-label'><label for='$key'>$label</label></span>";
+    $form .= "<span class='edit-value'>" . fInput('text', $key, $$key, '', '', '', '', '', $key) . "</span>";
+    $form .= '</p>';
+  }
+  $form .= eInput('arc_redirect');
+  $form .= '<p>';
+  if ($id) {
+    $form .= sInput('save').hInput('id',$id).fInput('submit','save',gTxt('Save'),'publish');
+  } else {
+    $form .= sInput('add').fInput('submit','add',gTxt('Add'),'publish');
+  }
+  $form .= '</p>';
+  $html .= form('<div class="plugin-column"><div class="txp-edit">' . $form . '</div></div>', '', '', '', 'edit-form');
   
   echo $html;
   
