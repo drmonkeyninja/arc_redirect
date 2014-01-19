@@ -102,11 +102,11 @@ function arc_redirect_list($message = '') {
   , 'margin-bottom:25px');
   
   // Add a list of existing redirects
-  $html .= n.n.'<form action="index.php" id="arc_redirect_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">';
+  $html .= n.n.'<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">';
   $html .= startTable(null, null, 'txp-list');
   
   $html .= '<thead>' . tr(
-    hCell('')
+    hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="Toggle all/none selected" class="multi-edit"')
     .hCell('ID#')
     .hCell('Original URL')
     .hCell('Redirect URL')
