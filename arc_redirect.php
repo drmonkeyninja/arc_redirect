@@ -102,7 +102,7 @@ function arc_redirect_list($message = '') {
   , 'margin-bottom:25px');
   
   // Add a list of existing redirects
-  $html .= n.n.'<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">';
+  $html .= n.n.'<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
   $html .= startTable(null, null, 'txp-list');
   
   $html .= '<thead>' . tr(
@@ -126,13 +126,12 @@ function arc_redirect_list($message = '') {
     );
   }
   
-  $html .= n.'<tfoot>'.tr(
-      tda(select_buttons()
-      .event_multiedit_form('arc_redirect', array('delete'=>gTxt('delete')),1,'','','',''),
-      ' class="multi-edit" colspan="5" style="text-align:right;border:none"')
-    ).n.'</tfoot>';
-  
   $html .= endTable();
+
+  $html .= '<div class="multi-edit">'
+    . event_multiedit_form('arc_redirect', array('delete'=>gTxt('delete')),1,'','','','')
+    . '</div>';
+
   $html .= '</form>';
   
   $html .= n.'<div id="'.$event.'_navigation" class="txp-navigation">'
