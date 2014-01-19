@@ -84,9 +84,9 @@ function arc_redirect_list($message = '') {
     
   $rs = safe_rows_start('*', 'arc_redirect', "$criteria order by $sort_sql limit $offset, $limit");
 
-  
+  $html = "<h1 class='txp-heading'>arc_redirect</h1>";
   // Include a quick add form
-  $html = form(
+  $html .= form(
     startTable('edit')
       .tr(
         tda(tag('Redirect from URL (produces 404 page)','label', ' for="originalUrl"'),' style="vertical-align:middle"')
@@ -103,26 +103,26 @@ function arc_redirect_list($message = '') {
   
   // Add a list of existing redirects
   $html .= n.n.'<form action="index.php" id="arc_redirect_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">';
-  $html .= startTable('list');
+  $html .= startTable(null, null, 'txp-list');
   
-  $html .= tr(
-    hCell('ID#')
-    .hCell()
+  $html .= '<thead>' . tr(
+    hCell('')
+    .hCell('ID#')
     .hCell('Original URL')
     .hCell('Redirect URL')
-    .hCell()
-  );
+    .hCell('Manage')
+  ) . '</thead>';
   
   while ($redirect = nextRow($rs)) {
     $editLink = href(gTxt('edit'),
       '?event=arc_redirect&amp;step=edit&amp;id='.$redirect['arc_redirectID']);
     $redirectLink = href('Test',$redirect['originalUrl']);
     $html .= tr(
-      td($redirect['arc_redirectID'], 20, 'id')
-      .td("<ul><li class='action-edit'>$editLink</li><li class='action-view'>$redirectLink</li></ul>", 35, 'actions')
+      td(fInput('checkbox', 'selected[]', $redirect['arc_redirectID']), '', 'multi-edit')
+      .td($redirect['arc_redirectID'], 20, 'id')
       .td($redirect['originalUrl'], 175)
       .td($redirect['redirectUrl'], 175)
-      .td(fInput('checkbox', 'selected[]', $redirect['arc_redirectID']), '', 'multi-edit')
+      .td("$editLink <span> | </span> $redirectLink", 35, 'manage')
     );
   }
   
