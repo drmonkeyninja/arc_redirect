@@ -3,7 +3,7 @@ $plugin['name'] = 'arc_redirect';
 
 $plugin['version'] = '1.01beta';
 $plugin['author'] = 'Andy Carter';
-$plugin['author_uri'] = 'http://redhotchilliproject.com/';
+$plugin['author_uri'] = 'http://andy-carter.com/';
 $plugin['description'] = 'Love redirects, hate 404s';
 $plugin['order'] = '5';
 $plugin['type'] = '1';
@@ -49,7 +49,7 @@ function arc_redirect($event, $step) {
 
 		  // In case the header() method fails, fall back on a classic redirect
 		  echo '<html><head><META HTTP-EQUIV="Refresh" CONTENT="0;URL='
-		    .$permlink.'"></head><body></body></html>';
+		    . $redirect['redirectUrl'] . '"></head><body></body></html>';
 		  die();
 	  }
 
@@ -300,7 +300,7 @@ Requirements:-
 
 h2(section). Author
 
-"Andy Carter":http://redhotchilliproject.com. For other Textpattern plugins by me visit my "Plugins page":http://redhotchilliproject.com/txp.
+"Andy Carter":http://andy-carter.com. For other Textpattern plugins by me visit my "Plugins page":http://andy-carter.com/txp.
 
 Thanks to "Oliver Ker":http://oliverker.co.uk/ for giving me the idea for this plugin.
 
