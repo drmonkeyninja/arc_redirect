@@ -1,7 +1,7 @@
 <?php
 $plugin['name'] = 'arc_redirect';
 
-$plugin['version'] = '1.01beta';
+$plugin['version'] = '1.1';
 $plugin['author'] = 'Andy Carter';
 $plugin['author_uri'] = 'http://andy-carter.com/';
 $plugin['description'] = 'Love redirects, hate 404s';
