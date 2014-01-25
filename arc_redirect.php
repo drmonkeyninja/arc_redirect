@@ -295,7 +295,7 @@ If you're in the process of restructuring a Textpattern site, then this is the p
 
 Requirements:-
 
-* Textpattern 4.2+
+* Textpattern 4.5+
 
 
 h2(section). Author
