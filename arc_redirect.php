@@ -60,7 +60,7 @@ function arc_redirect_tab($event, $step) {
     case 'add': arc_redirect_add(); break;
     case 'save': arc_redirect_save(); break;
     case 'edit': arc_redirect_edit(); break;
-    case 'arc_redirect_multi_edit': arc_redirect_multiedit(); break;
+    case 'arc_redirect_multiedit': arc_redirect_multiedit(); break;
     default: arc_redirect_list();
   }
 }
@@ -92,7 +92,7 @@ function arc_redirect_list($message = '') {
   $form .= "<span class='edit-value'>" . fInput('text', 'redirectUrl', '', '', '', '', '', '', 'redirectUrl') . '&nbsp;' . fInput('submit', 'add', gTxt('Add')) . "</span></p>";
 
   $form .= eInput('arc_redirect').sInput('add');
-  $html .= form("<div class='plugin-column'>" . $form . "</div>", " class='edit-form'");
+  $html .= form("<div class='plugin-column'>" . $form . "</div>", '', '', '', 'edit-form');
   
   // Add a list of existing redirects
   $html .= n.n.'<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
@@ -121,9 +121,11 @@ function arc_redirect_list($message = '') {
   
   $html .= endTable();
 
-  $html .= '<div class="multi-edit">'
-    . event_multiedit_form('arc_redirect', array('delete'=>gTxt('delete')),1,'','','','')
-    . '</div>';
+  $methods = array(
+    'delete' => gTxt('delete')
+  );
+
+  $html .= multi_edit($methods, 'arc_redirect', 'arc_redirect_multiedit');
 
   $html .= '</form>';
   
