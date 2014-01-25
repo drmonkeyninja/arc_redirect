@@ -17,7 +17,7 @@ if (!defined('PLUGIN_LIFECYCLE_NOTIFY')) define('PLUGIN_LIFECYCLE_NOTIFY', 0x000
 $plugin['flags'] = '2';
 
 if (!defined('txpinterface'))
-        @include_once('../zem_tpl.php');
+        @include_once('zem_tpl.php');
 
 # --- BEGIN PLUGIN CODE ---
 register_callback('arc_redirect_install','plugin_lifecycle.arc_redirect', 'installed');
