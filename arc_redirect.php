@@ -1,9 +1,9 @@
 <?php
 $plugin['name'] = 'arc_redirect';
 
-$plugin['version'] = '1.01beta';
+$plugin['version'] = '1.1';
 $plugin['author'] = 'Andy Carter';
-$plugin['author_uri'] = 'http://redhotchilliproject.com/';
+$plugin['author_uri'] = 'http://andy-carter.com/';
 $plugin['description'] = 'Love redirects, hate 404s';
 $plugin['order'] = '5';
 $plugin['type'] = '1';
@@ -17,7 +17,7 @@ if (!defined('PLUGIN_LIFECYCLE_NOTIFY')) define('PLUGIN_LIFECYCLE_NOTIFY', 0x000
 $plugin['flags'] = '2';
 
 if (!defined('txpinterface'))
-        @include_once('../zem_tpl.php');
+        @include_once('zem_tpl.php');
 
 # --- BEGIN PLUGIN CODE ---
 register_callback('arc_redirect_install','plugin_lifecycle.arc_redirect', 'installed');
@@ -49,7 +49,7 @@ function arc_redirect($event, $step) {
 
 		  // In case the header() method fails, fall back on a classic redirect
 		  echo '<html><head><META HTTP-EQUIV="Refresh" CONTENT="0;URL='
-		    .$permlink.'"></head><body></body></html>';
+		    . $redirect['redirectUrl'] . '"></head><body></body></html>';
 		  die();
 	  }
 
@@ -60,7 +60,7 @@ function arc_redirect_tab($event, $step) {
     case 'add': arc_redirect_add(); break;
     case 'save': arc_redirect_save(); break;
     case 'edit': arc_redirect_edit(); break;
-    case 'arc_redirect_multi_edit': arc_redirect_multiedit(); break;
+    case 'arc_redirect_multiedit': arc_redirect_multiedit(); break;
     default: arc_redirect_list();
   }
 }
@@ -84,55 +84,49 @@ function arc_redirect_list($message = '') {
     
   $rs = safe_rows_start('*', 'arc_redirect', "$criteria order by $sort_sql limit $offset, $limit");
 
-  
+  $html = "<h1 class='txp-heading'>arc_redirect</h1>";
   // Include a quick add form
-  $html = form(
-    startTable('edit')
-      .tr(
-        tda(tag('Redirect from URL (produces 404 page)','label', ' for="originalUrl"'),' style="vertical-align:middle"')
-        .td(fInput('text','originalUrl','','edit','','','','','originalUrl'))
-      ).tr(
-        tda(tag('Redirect to URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
-        .td(fInput('text','redirectUrl','','edit','','','','','redirectUrl')
-        .eInput('arc_redirect')
-        .sInput('add').'&nbsp;'.fInput('submit','add',gTxt('Add'),'publish')
-        )
-      )  
-    .endTable()
-  , 'margin-bottom:25px');
+  $form = "<p><span class='edit-label'><label for='originalUrl'>Redirect from URL (produces 404 page)</label></span>";
+  $form .= "<span class='edit-value'>" . fInput('text', 'originalUrl', '', '', '', '', '', '', 'originalUrl') . "</span></p>";
+  $form .= "<p><span class='edit-label'><label for='redirectUrl'>Redirect to URL</label></span>";
+  $form .= "<span class='edit-value'>" . fInput('text', 'redirectUrl', '', '', '', '', '', '', 'redirectUrl') . '&nbsp;' . fInput('submit', 'add', gTxt('Add')) . "</span></p>";
+
+  $form .= eInput('arc_redirect').sInput('add');
+  $html .= form("<div class='plugin-column'>" . $form . "</div>", '', '', '', 'edit-form');
   
   // Add a list of existing redirects
-  $html .= n.n.'<form action="index.php" id="arc_redirect_form" method="post" name="longform" onsubmit="return verify(\''.gTxt('are_you_sure').'\')">';
-  $html .= startTable('list');
+  $html .= n.n.'<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
+  $html .= startTable(null, null, 'txp-list');
   
-  $html .= tr(
-    hCell('ID#')
-    .hCell()
+  $html .= '<thead>' . tr(
+    hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="Toggle all/none selected" class="multi-edit"')
+    .hCell('ID#')
     .hCell('Original URL')
     .hCell('Redirect URL')
-    .hCell()
-  );
+    .hCell('Manage')
+  ) . '</thead>';
   
   while ($redirect = nextRow($rs)) {
     $editLink = href(gTxt('edit'),
       '?event=arc_redirect&amp;step=edit&amp;id='.$redirect['arc_redirectID']);
     $redirectLink = href('Test',$redirect['originalUrl']);
     $html .= tr(
-      td($redirect['arc_redirectID'], 20, 'id')
-      .td("<ul><li class='action-edit'>$editLink</li><li class='action-view'>$redirectLink</li></ul>", 35, 'actions')
+      td(fInput('checkbox', 'selected[]', $redirect['arc_redirectID']), '', 'multi-edit')
+      .td($redirect['arc_redirectID'], 20, 'id')
       .td($redirect['originalUrl'], 175)
       .td($redirect['redirectUrl'], 175)
-      .td(fInput('checkbox', 'selected[]', $redirect['arc_redirectID']), '', 'multi-edit')
+      .td("$editLink <span> | </span> $redirectLink", 35, 'manage')
     );
   }
   
-  $html .= n.'<tfoot>'.tr(
-      tda(select_buttons()
-      .event_multiedit_form('arc_redirect', array('delete'=>gTxt('delete')),1,'','','',''),
-      ' class="multi-edit" colspan="5" style="text-align:right;border:none"')
-    ).n.'</tfoot>';
-  
   $html .= endTable();
+
+  $methods = array(
+    'delete' => gTxt('delete')
+  );
+
+  $html .= multi_edit($methods, 'arc_redirect', 'arc_redirect_multiedit');
+
   $html .= '</form>';
   
   $html .= n.'<div id="'.$event.'_navigation" class="txp-navigation">'
@@ -154,23 +148,27 @@ function arc_redirect_edit($message='') {
     $rs = safe_row('originalUrl,redirectUrl', 'arc_redirect', "arc_redirectID = $id");
     extract($rs);
   }
-    
-  $html = form(
-    startTable('edit')
-      .tr(
-        tda(tag('Redirect from URL (produces 404 page)','label', ' for="originalUrl"'),' style="vertical-align:middle"')
-        .td(fInput('text','originalUrl',$originalUrl,'edit','','','','','originalUrl'))
-      ).tr(
-        tda(tag('Redirect to URL','label', ' for="redirectUrl"'),' style="vertical-align:middle"')
-        .td(fInput('text','redirectUrl',$redirectUrl,'edit','','','','','redirectUrl')
-        .eInput('arc_redirect').'&nbsp;'
-        .(($id)?
-        sInput('save').hInput('id',$id).fInput('submit','save',gTxt('Save'),'publish')
-          :sInput('add').fInput('submit','add',gTxt('Add'),'publish')
-        ))
-      )  
-    .endTable()
+
+  $html = "<h1 class='txp-heading'>arc_redirect</h1>";
+  $form = '<h2>' . ($id ? 'Edit' : 'Add') . ' Redirect</h2>';
+  $fields = array(
+    'originalUrl' => 'Redirect from URL',
+    'redirectUrl' => 'Redirect to URL'
   );
+  foreach ($fields as $key => $label) {
+    $form .= "<p class='$key'><span class='edit-label'><label for='$key'>$label</label></span>";
+    $form .= "<span class='edit-value'>" . fInput('text', $key, $$key, '', '', '', '', '', $key) . "</span>";
+    $form .= '</p>';
+  }
+  $form .= eInput('arc_redirect');
+  $form .= '<p>';
+  if ($id) {
+    $form .= sInput('save').hInput('id',$id).fInput('submit','save',gTxt('Save'),'publish');
+  } else {
+    $form .= sInput('add').fInput('submit','add',gTxt('Add'),'publish');
+  }
+  $form .= '</p>';
+  $html .= form('<div class="plugin-column"><div class="txp-edit">' . $form . '</div></div>', '', '', '', 'edit-form');
   
   echo $html;
   
@@ -297,12 +295,12 @@ If you're in the process of restructuring a Textpattern site, then this is the p
 
 Requirements:-
 
-* Textpattern 4.2+
+* Textpattern 4.5+
 
 
 h2(section). Author
 
-"Andy Carter":http://redhotchilliproject.com. For other Textpattern plugins by me visit my "Plugins page":http://redhotchilliproject.com/txp.
+"Andy Carter":http://andy-carter.com. For other Textpattern plugins by me visit my "Plugins page":http://andy-carter.com/txp.
 
 Thanks to "Oliver Ker":http://oliverker.co.uk/ for giving me the idea for this plugin.
 

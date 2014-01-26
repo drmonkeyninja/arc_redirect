@@ -1,3 +1,7 @@
 h1. arc_redirect
 
-This is the development version of the arc_redirect plugin for Textpattern. The plugin allows URL redirects to be defined on a Textpattern site to avoid delivering 404s to site visitors.
+This is a Textpattern plugin for handling URL redirects. It adds an admin interface for defining redirects to avoid delivering 404s to site visitors.
+
+h2. Requirements
+
+Textpattern 4.5+
