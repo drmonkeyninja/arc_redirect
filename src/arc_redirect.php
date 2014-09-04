@@ -192,28 +192,36 @@ function arc_redirect_edit($message='') {
 	
 }
 
-function arc_redirect_add() {
+function arc_redirect_add()
+{
 	$originalUrl = gps('originalUrl');
 	$redirectUrl = gps('redirectUrl');
 	
-	if ($originalUrl === '' || $redirectUrl === '') {
+	if ($originalUrl === '' || $redirectUrl === '')
+	{
 		arc_redirect_edit('Unable to add new redirect');
 		return;
 	}
+
+	$statusCode = gps('status_code') == 301 ? 301 : 307;
 	
 	// Strip final slash from original url
 	$originalUrl = rtrim($originalUrl, '/');
 	
-	$q = safe_insert("arc_redirect",
-		"originalUrl = '".trim(doSlash($originalUrl))."', redirectUrl = '".trim(doSlash($redirectUrl))."'"
+	$q = safe_insert(
+		"arc_redirect",
+		"originalUrl = '" . trim(doSlash($originalUrl)) . "', redirectUrl = '" . trim(doSlash($redirectUrl)) . "', status_code = " . $statusCode
 	);
 	
 	$GLOBALS['ID'] = mysql_insert_id();
 	
-	if ($q) {
+	if ($q)
+	{
 		$message = gTxt('Redirect added');
 		arc_redirect_list($message);
 	}
+
+	return;
 }
 
 function arc_redirect_save() {
