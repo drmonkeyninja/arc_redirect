@@ -84,15 +84,22 @@ function arc_redirect_list($message = '')
 		
 	$rs = safe_rows_start('*', 'arc_redirect', "$criteria order by $sort_sql limit $offset, $limit");
 
+	$statusCodes = array(
+		301 => 'Permanent',
+		307 => 'Temporary'
+	);
+
 	$html = '<h1 class="txp-heading">arc_redirect</h1>';
 	// Include a quick add form
-	$form = "<p><span class='edit-label'><label for='originalUrl'>Redirect from URL (produces 404 page)</label></span>";
-	$form .= "<span class='edit-value'>" . fInput('text', 'originalUrl', '', '', '', '', '', '', 'originalUrl') . "</span></p>";
-	$form .= "<p><span class='edit-label'><label for='redirectUrl'>Redirect to URL</label></span>";
-	$form .= "<span class='edit-value'>" . fInput('text', 'redirectUrl', '', '', '', '', '', '', 'redirectUrl') . '&nbsp;' . fInput('submit', 'add', gTxt('Add')) . "</span></p>";
+	$form = '<p><span class="edit-label"><label for="originalUrl">Redirect from URL (produces 404 page)</label></span>';
+	$form .= '<span class="edit-value">' . fInput('text', 'originalUrl', '', '', '', '', '', '', 'originalUrl') . '</span></p>';
+	$form .= '<p><span class="edit-label"><label for="redirectUrl">Redirect to URL</label></span>';
+	$form .= '<span class="edit-value">' . fInput('text', 'redirectUrl', '', '', '', '', '', '', 'redirectUrl') . '</span></p>';
+	$form .= '<p><span class="edit-label"><label for="status_code">Redirect Type</label></span>';
+	$form .= '<span class="edit-value"><select name="status_code">' . type_options($statusCodes) . '</select>&nbsp;' . fInput('submit', 'add', gTxt('Add')) . '</span></p>';
 
 	$form .= eInput('arc_redirect').sInput('add');
-	$html .= form("<div class='plugin-column'>" . $form . "</div>", '', '', '', 'edit-form');
+	$html .= form('<div class="plugin-column">' . $form . '</div>', '', '', '', 'edit-form');
 	
 	// Add a list of existing redirects
 	$html .= n . n . '<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
