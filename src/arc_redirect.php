@@ -65,8 +65,8 @@ function arc_redirect_tab($event, $step) {
 	}
 }
 
-function arc_redirect_list($message = '') {
-
+function arc_redirect_list($message = '')
+{
 	global $event;
 	
 	extract(gpsa(array('page')));
@@ -84,7 +84,7 @@ function arc_redirect_list($message = '') {
 		
 	$rs = safe_rows_start('*', 'arc_redirect', "$criteria order by $sort_sql limit $offset, $limit");
 
-	$html = "<h1 class='txp-heading'>arc_redirect</h1>";
+	$html = '<h1 class="txp-heading">arc_redirect</h1>';
 	// Include a quick add form
 	$form = "<p><span class='edit-label'><label for='originalUrl'>Redirect from URL (produces 404 page)</label></span>";
 	$form .= "<span class='edit-value'>" . fInput('text', 'originalUrl', '', '', '', '', '', '', 'originalUrl') . "</span></p>";
@@ -95,27 +95,36 @@ function arc_redirect_list($message = '') {
 	$html .= form("<div class='plugin-column'>" . $form . "</div>", '', '', '', 'edit-form');
 	
 	// Add a list of existing redirects
-	$html .= n.n.'<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
+	$html .= n . n . '<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
 	$html .= startTable(null, null, 'txp-list');
 	
 	$html .= '<thead>' . tr(
-		hCell(fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), '', ' title="Toggle all/none selected" class="multi-edit"')
-		.hCell('ID#')
-		.hCell('Original URL')
-		.hCell('Redirect URL')
-		.hCell('Manage')
+		hCell(
+			fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), 
+			'',
+			' title="Toggle all/none selected" class="multi-edit"'
+		)
+		. hCell('ID#')
+		. hCell('Original URL')
+		. hCell('Redirect URL')
+		. hCell('Type')
+		. hCell('Manage')
 	) . '</thead>';
 	
-	while ($redirect = nextRow($rs)) {
-		$editLink = href(gTxt('edit'),
-			'?event=arc_redirect&amp;step=edit&amp;id='.$redirect['arc_redirectID']);
+	while ($redirect = nextRow($rs))
+	{
+		$editLink = href(
+			gTxt('edit'),
+			'?event=arc_redirect&amp;step=edit&amp;id=' . $redirect['arc_redirectID']
+		);
 		$redirectLink = href('Test',$redirect['originalUrl']);
 		$html .= tr(
 			td(fInput('checkbox', 'selected[]', $redirect['arc_redirectID']), '', 'multi-edit')
-			.td($redirect['arc_redirectID'], 20, 'id')
-			.td($redirect['originalUrl'], 175)
-			.td($redirect['redirectUrl'], 175)
-			.td("$editLink <span> | </span> $redirectLink", 35, 'manage')
+			. td($redirect['arc_redirectID'], 20, 'id')
+			. td($redirect['originalUrl'], 175)
+			. td($redirect['redirectUrl'], 175)
+			. td($redirect['status_code']==301 ? 'Permanent' : 'Temporary', 175)
+			. td("$editLink <span> | </span> $redirectLink", 35, 'manage')
 		);
 	}
 	
@@ -129,11 +138,13 @@ function arc_redirect_list($message = '') {
 
 	$html .= '</form>';
 	
-	$html .= n.'<div id="'.$event.'_navigation" class="txp-navigation">'
-		.n.nav_form('arc_redirect', $page, $numPages, '', '', '', '', $total, $limit)
-		.n.'</div>';
+	$html .= n . '<div id="'.$event.'_navigation" class="txp-navigation">'
+		. n . nav_form('arc_redirect', $page, $numPages, '', '', '', '', $total, $limit)
+		. n . '</div>';
 	
 	echo $html;
+
+	return;
 	
 }
 
