@@ -95,8 +95,8 @@ function arc_redirect_list($message = '')
 	$form .= '<span class="edit-value">' . fInput('text', 'originalUrl', '', '', '', '', '', '', 'originalUrl') . '</span></p>';
 	$form .= '<p><span class="edit-label"><label for="redirectUrl">Redirect to URL</label></span>';
 	$form .= '<span class="edit-value">' . fInput('text', 'redirectUrl', '', '', '', '', '', '', 'redirectUrl') . '</span></p>';
-	$form .= '<p><span class="edit-label"><label for="status_code">Redirect Type</label></span>';
-	$form .= '<span class="edit-value"><select name="status_code">' . type_options($statusCodes) . '</select>&nbsp;' . fInput('submit', 'add', gTxt('Add')) . '</span></p>';
+	$form .= '<p><span class="edit-label"><label for="statusCode">Redirect Type</label></span>';
+	$form .= '<span class="edit-value"><select name="statusCode">' . type_options($statusCodes) . '</select>&nbsp;' . fInput('submit', 'add', gTxt('Add')) . '</span></p>';
 
 	$form .= eInput('arc_redirect').sInput('add');
 	$html .= form('<div class="plugin-column">' . $form . '</div>', '', '', '', 'edit-form');
@@ -130,7 +130,7 @@ function arc_redirect_list($message = '')
 			. td($redirect['arc_redirectID'], 20, 'id')
 			. td($redirect['originalUrl'], 175)
 			. td($redirect['redirectUrl'], 175)
-			. td($redirect['status_code']==301 ? 'Permanent' : 'Temporary', 175)
+			. td($redirect['statusCode']==301 ? 'Permanent' : 'Temporary', 175)
 			. td("$editLink <span> | </span> $redirectLink", 35, 'manage')
 		);
 	}
@@ -203,14 +203,14 @@ function arc_redirect_add()
 		return;
 	}
 
-	$statusCode = gps('status_code') == 301 ? 301 : 307;
+	$statusCode = gps('statusCode') == 301 ? 301 : 307;
 	
 	// Strip final slash from original url
 	$originalUrl = rtrim($originalUrl, '/');
 	
 	$q = safe_insert(
 		"arc_redirect",
-		"originalUrl = '" . trim(doSlash($originalUrl)) . "', redirectUrl = '" . trim(doSlash($redirectUrl)) . "', status_code = " . $statusCode
+		"originalUrl = '" . trim(doSlash($originalUrl)) . "', redirectUrl = '" . trim(doSlash($redirectUrl)) . "', statusCode = " . $statusCode
 	);
 	
 	$GLOBALS['ID'] = mysql_insert_id();
@@ -299,9 +299,9 @@ function arc_redirect_install()
 		return 'Error - unable to create arc_redirect table';
 	}
 
-	if (!in_array('status_code', getThings('DESCRIBE ' . safe_pfx('arc_redirect'))))
+	if (!in_array('statusCode', getThings('DESCRIBE ' . safe_pfx('arc_redirect'))))
 	{
-		safe_alter('arc_redirect', 'ADD status_code INT NOT NULL DEFAULT \'301\'');
+		safe_alter('arc_redirect', 'ADD statusCode INT NOT NULL DEFAULT \'301\'');
 	}
 
 	return;
