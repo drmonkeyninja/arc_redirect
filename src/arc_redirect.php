@@ -242,17 +242,21 @@ function arc_redirect_add()
 	return;
 }
 
-function arc_redirect_save() {
+function arc_redirect_save()
+{
 
-	if (!$id=gps('id')) {
+	if (!$id=gps('id'))
+	{
 		arc_redirect_list('Unable to save redirect');
 		return;
 	}
 	
 	$originalUrl = gps('originalUrl');
 	$redirectUrl = gps('redirectUrl');
+	$statusCode = gps('statusCode');
 	
-	if ($originalUrl == '' || $redirectUrl == '') {
+	if ($originalUrl == '' || $redirectUrl == '' || empty($statusCode))
+	{
 		arc_redirect_edit('Unable to save redirect');
 		return;
 	}
@@ -262,15 +266,18 @@ function arc_redirect_save() {
 	
 	$id = doSlash($id);
 	
-	$rs = safe_update("arc_redirect",
-		"originalUrl    = '".trim(doSlash($originalUrl))."',  redirectUrl = '".trim(doSlash($redirectUrl))."'",
+	$rs = safe_update(
+		"arc_redirect",
+		"originalUrl    = '" . trim(doSlash($originalUrl)) . "',  redirectUrl = '" . trim(doSlash($redirectUrl)) . "',  statusCode = " . trim(doSlash($statusCode)) . "",
 		"arc_redirectID = $id"
 	);
 	
-	if ($rs) {
+	if ($rs)
+	{
 		$message = gTxt('Redirect updated');
 		arc_redirect_list($message);
 	}
+	return;
 }
 
 function arc_redirect_multiedit() {
