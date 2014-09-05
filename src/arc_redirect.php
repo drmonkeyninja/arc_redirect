@@ -30,7 +30,8 @@ register_callback('arc_redirect_tab', 'arc_redirect');
 /*
  * Check for redirected URLs and forward with a 301 where necessary.
  */
-function arc_redirect($event, $step) {
+function arc_redirect($event, $step)
+{
 	$url = PROTOCOL.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 	
 	// Strip final slash from url
@@ -38,20 +39,26 @@ function arc_redirect($event, $step) {
 	
 	$url = doSlash($url);
 	
-	$redirect = safe_row('redirectUrl', 'arc_redirect', "originalUrl = '$url'");
+	$redirect = safe_row('redirectUrl, statusCode', 'arc_redirect', "originalUrl = '$url'");
 
-		if (isset($redirect['redirectUrl'])) {
-			ob_end_clean();
+	if (isset($redirect['redirectUrl']))
+	{
+		ob_end_clean();
 
-			header("Status: 301");
-			header("HTTP/1.0 301 Moved Permanently");
-			header("Location: ".$redirect['redirectUrl'], TRUE, 301);
+		$status = 'HTTP/1.0 ';
+		$status .= $redirect['statusCode']==301 ? '301 Moved Permanently' : '302 Moved Temporarily';
 
-			// In case the header() method fails, fall back on a classic redirect
-			echo '<html><head><META HTTP-EQUIV="Refresh" CONTENT="0;URL='
-				. $redirect['redirectUrl'] . '"></head><body></body></html>';
-			die();
-		}
+		header("Status: {$redirect['statusCode']}");
+		header($status);
+		header('Location: ' . $redirect['redirectUrl'], TRUE, $redirect['statusCode']);
+
+		// In case the header() method fails, fall back on a classic redirect
+		echo '<html><head><meta http-equiv="Refresh" content="0;URL='
+			. $redirect['redirectUrl'] . '"></head><body></body></html>';
+		die();
+	}
+
+	return;
 
 }
 
@@ -86,7 +93,7 @@ function arc_redirect_list($message = '')
 
 	$statusCodes = array(
 		301 => 'Permanent',
-		307 => 'Temporary'
+		302 => 'Temporary'
 	);
 
 	$html = '<h1 class="txp-heading">arc_redirect</h1>';
@@ -203,7 +210,7 @@ function arc_redirect_add()
 		return;
 	}
 
-	$statusCode = gps('statusCode') == 301 ? 301 : 307;
+	$statusCode = gps('statusCode') == 301 ? 301 : 302;
 	
 	// Strip final slash from original url
 	$originalUrl = rtrim($originalUrl, '/');
