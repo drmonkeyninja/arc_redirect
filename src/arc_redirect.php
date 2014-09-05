@@ -162,29 +162,40 @@ function arc_redirect_list($message = '')
 	
 }
 
-function arc_redirect_edit($message='') {
+function arc_redirect_edit($message='')
+{
 	pagetop('arc_redirect',$message);
 	
 	$originalUrl = gps('originalUrl');
 	$redirectUrl = gps('redirectUrl');
+	$statusCode = gps('statusCode');
 	
 	if ($id=gps('id')) {
 		$id = doSlash($id);
-		$rs = safe_row('originalUrl,redirectUrl', 'arc_redirect', "arc_redirectID = $id");
+		$rs = safe_row('originalUrl,redirectUrl,statusCode', 'arc_redirect', "arc_redirectID = $id");
 		extract($rs);
 	}
 
-	$html = "<h1 class='txp-heading'>arc_redirect</h1>";
+	$statusCodes = array(
+		301 => 'Permanent',
+		302 => 'Temporary'
+	);
+
+	$html = '<h1 class="txp-heading">arc_redirect</h1>';
 	$form = '<h2>' . ($id ? 'Edit' : 'Add') . ' Redirect</h2>';
 	$fields = array(
 		'originalUrl' => 'Redirect from URL',
 		'redirectUrl' => 'Redirect to URL'
 	);
-	foreach ($fields as $key => $label) {
-		$form .= "<p class='$key'><span class='edit-label'><label for='$key'>$label</label></span>";
-		$form .= "<span class='edit-value'>" . fInput('text', $key, $$key, '', '', '', '', '', $key) . "</span>";
+	foreach ($fields as $key => $label) 
+	{
+		$form .= '<p class="' . $key . '"><span class="edit-label"><label for="$key">' . $label . '</label></span>';
+		$form .= '<span class="edit-value">' . fInput('text', $key, $$key, '', '', '', '', '', $key) . '</span>';
 		$form .= '</p>';
 	}
+	$form .= '<p class="statusCode"><span class="edit-label"><label for="statusCode">Redirect Type</label></span>';
+	$form .= selectInput('statusCode', $statusCodes, $statusCode);
+	$form .= '</p>';
 	$form .= eInput('arc_redirect');
 	$form .= '<p>';
 	if ($id) {
