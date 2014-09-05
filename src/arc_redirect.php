@@ -32,14 +32,20 @@ register_callback('arc_redirect_tab', 'arc_redirect');
  */
 function arc_redirect($event, $step)
 {
-	$url = PROTOCOL.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-	
+	$url = $_SERVER['REQUEST_URI'];
 	// Strip final slash from url
 	$url = rtrim($url, '/');
+	// Build the full URL including the protocol and domain
+	$fullUrl = PROTOCOL . $_SERVER['SERVER_NAME'] . $url;
 	
 	$url = doSlash($url);
+	$fullUrl = doSlash($fullUrl);
 	
-	$redirect = safe_row('redirectUrl, statusCode', 'arc_redirect', "originalUrl = '$url'");
+	$redirect = safe_row(
+		'redirectUrl', 
+		'arc_redirect', 
+		"originalUrl = '$url' OR originalUrl = '$fullUrl' ORDER BY CHAR_LENGTH(originalUrl) DESC"
+	);
 
 	if (isset($redirect['redirectUrl']))
 	{
