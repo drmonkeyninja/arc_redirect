@@ -355,7 +355,7 @@ if (0) {
 <!--
 # --- BEGIN PLUGIN HELP ---
 
-h1(title). arc_redirect (love redirects, hate 404s)
+h1. arc_redirect (love redirects, hate 404s)
 
 If you're in the process of restructuring a Textpattern site, then this is the plugin for you!
 
@@ -363,29 +363,44 @@ Requirements:-
 
 * Textpattern 4.5+
 
+h2. Installation
 
-h2(section). Author
+To install go to 'Plugins' under 'Admin' and paste the plugin code into the 'Install plugin' box, 'upload' and then 'install'. You will then need to activate the plugin.
+
+
+h2. Uninstall
+
+To uninstall %(tag)arc_redirect% simply delete the plugin from the 'Plugins' tab.  This will remove the plugin code and drop the %(tag)arc_redirect% table from your Textpattern database.
+
+
+h2. Usage
+
+arc_redirect adds a new tab under 'Extensions' from where you can define pairs of URLs for handling redirects. Basically provide an original URL on your Textpattern site that is generating a 404, "page not found", error and a redirect URL. Then whenever someone goes to the original URL rather than get the standard 404 error page they will be redircted to the new URL (with a 301 permenantely moved, or 302 temporarily removed).
+
+The redirect from URL must produce a 404 page in Textpattern on the site this plugin is installed.
+
+* arc_redirect treats _http://www.example.com/missing_ the same as _http://www.example.com/missing/_
+* arc_redirect does not treat _http://example.com/missing_ and _http://www.example.com/missing_ as the same URL
+* You can use absolute URLs like _/missing_
+
+
+h2. Author
 
 "Andy Carter":http://andy-carter.com. For other Textpattern plugins by me visit my "Plugins page":http://andy-carter.com/txp.
 
 Thanks to "Oliver Ker":http://oliverker.co.uk/ for giving me the idea for this plugin.
 
+h2. License
 
-h2(section). Installation / Uninstallation
+The MIT License (MIT)
 
-To install go to the 'plugins' tab under 'admin' and paste the plugin code into the 'Install plugin' box, 'upload' and then 'install'. Finally activate the plugin.
+Copyright (c) 2014 Andy Carter
 
-To uninstall %(tag)arc_redirect% simply delete the plugin from the 'Plugins' tab.  This will remove the plugin code and drop the %(tag)arc_redirect% table from your Textpattern database.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-h2(section). Usage
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-%(tag)arc_redirect% adds a new tab under 'Extensions' from where you can define pairs of URLs for handling redirects. Basically provide an original URL on your Textpattern site that is generating a 404, "page not found", error and a redirect URL. Then whenever someone goes to the original URL rather than get the standard 404 error page they will be redircted to the new URL (with a 301 permenantely moved).
-
-The redirect from URL must produce a 404 page in Textpattern on the site this plugin is installed.
-
-* %(tag)arc_redirect% treats http://www.example.com/missing the same as http://www.example.com/missing/
-* %(tag)arc_redirect% does not treat http://example.com/missing and http://www.example.com/missing as the same URL
-
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # --- END PLUGIN HELP ---
 -->
