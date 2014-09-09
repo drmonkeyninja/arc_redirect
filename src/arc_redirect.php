@@ -112,7 +112,7 @@ function arc_redirect_list($message = '')
 	$form .= '<span class="edit-value"><select name="statusCode">' . type_options($statusCodes) . '</select>&nbsp;' . fInput('submit', 'add', gTxt('Add')) . '</span></p>';
 
 	$form .= eInput('arc_redirect').sInput('add');
-	$html .= form('<div class="plugin-column">' . $form . '</div>', '', '', '', 'edit-form');
+	$html .= form('<div class="plugin-column">' . $form . '</div>', '', '', 'post', 'edit-form');
 	
 	// Add a list of existing redirects
 	$html .= n . n . '<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
@@ -218,8 +218,8 @@ function arc_redirect_edit($message='')
 
 function arc_redirect_add()
 {
-	$originalUrl = gps('originalUrl');
-	$redirectUrl = gps('redirectUrl');
+	$originalUrl = ps('originalUrl');
+	$redirectUrl = ps('redirectUrl');
 	
 	if ($originalUrl === '' || $redirectUrl === '')
 	{
@@ -227,7 +227,7 @@ function arc_redirect_add()
 		return;
 	}
 
-	$statusCode = gps('statusCode') == 301 ? 301 : 302;
+	$statusCode = ps('statusCode') == 301 ? 301 : 302;
 	
 	// Strip final slash from original url
 	$originalUrl = rtrim($originalUrl, '/');
