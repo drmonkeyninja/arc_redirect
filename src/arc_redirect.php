@@ -137,12 +137,12 @@ function arc_redirect_list($message = '')
 			gTxt('edit'),
 			'?event=arc_redirect&amp;step=edit&amp;id=' . $redirect['arc_redirectID']
 		);
-		$redirectLink = href('Test',$redirect['originalUrl']);
+		$redirectLink = href('Test', $redirect['originalUrl']);
 		$html .= tr(
 			td(fInput('checkbox', 'selected[]', $redirect['arc_redirectID']), '', 'multi-edit')
 			. td($redirect['arc_redirectID'], 20, 'id')
-			. td($redirect['originalUrl'], 175)
-			. td($redirect['redirectUrl'], 175)
+			. td(htmlspecialchars($redirect['originalUrl']), 175)
+			. td(htmlspecialchars($redirect['redirectUrl']), 175)
 			. td($redirect['statusCode']==301 ? 'Permanent' : 'Temporary', 175)
 			. td("$editLink <span> | </span> $redirectLink", 35, 'manage')
 		);
