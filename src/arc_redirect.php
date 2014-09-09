@@ -237,8 +237,6 @@ function arc_redirect_add()
 		"originalUrl = '" . trim(doSlash($originalUrl)) . "', redirectUrl = '" . trim(doSlash($redirectUrl)) . "', statusCode = " . $statusCode
 	);
 	
-	$GLOBALS['ID'] = mysql_insert_id();
-	
 	if ($q)
 	{
 		$message = gTxt('Redirect added');
