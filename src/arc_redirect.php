@@ -44,7 +44,7 @@ function arc_redirect($event, $step)
 	$redirect = safe_row(
 		'redirectUrl', 
 		'arc_redirect', 
-		"originalUrl = '$url' OR originalUrl = '$fullUrl' ORDER BY CHAR_LENGTH(originalUrl) DESC"
+		"originalUrl = '$url' OR originalUrl = '$fullUrl' ORDER BY CHAR_LENGTH(originalUrl) DESC, arc_redirectID DESC"
 	);
 
 	if (isset($redirect['redirectUrl']))
