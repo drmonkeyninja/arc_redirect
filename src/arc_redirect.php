@@ -210,7 +210,7 @@ function arc_redirect_edit($message='')
 		$form .= sInput('add').fInput('submit','add',gTxt('Add'),'publish');
 	}
 	$form .= '</p>';
-	$html .= form('<div class="plugin-column"><div class="txp-edit">' . $form . '</div></div>', '', '', '', 'edit-form');
+	$html .= form('<div class="plugin-column"><div class="txp-edit">' . $form . '</div></div>', '', '', 'post', 'edit-form');
 	
 	echo $html;
 	
@@ -250,16 +250,15 @@ function arc_redirect_add()
 
 function arc_redirect_save()
 {
-
-	if (!$id=gps('id'))
+	if (!$id=ps('id'))
 	{
 		arc_redirect_list('Unable to save redirect');
 		return;
 	}
 	
-	$originalUrl = gps('originalUrl');
-	$redirectUrl = gps('redirectUrl');
-	$statusCode = gps('statusCode');
+	$originalUrl = ps('originalUrl');
+	$redirectUrl = ps('redirectUrl');
+	$statusCode = ps('statusCode');
 	
 	if ($originalUrl == '' || $redirectUrl == '' || empty($statusCode))
 	{
