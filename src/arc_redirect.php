@@ -1,7 +1,7 @@
 <?php
 $plugin['name'] = 'arc_redirect';
 
-$plugin['version'] = '1.2.0';
+$plugin['version'] = '1.2.1';
 $plugin['author'] = 'Andy Carter';
 $plugin['author_uri'] = 'http://andy-carter.com/';
 $plugin['description'] = 'Love redirects, hate 404s';
@@ -37,13 +37,13 @@ function arc_redirect($event, $step)
 	$url = rtrim($url, '/');
 	// Build the full URL including the protocol and domain
 	$fullUrl = PROTOCOL . $_SERVER['SERVER_NAME'] . $url;
-	
+
 	$url = doSlash($url);
 	$fullUrl = doSlash($fullUrl);
-	
+
 	$redirect = safe_row(
-		'redirectUrl', 
-		'arc_redirect', 
+		'redirectUrl',
+		'arc_redirect',
 		"originalUrl = '$url' OR originalUrl = '$fullUrl' ORDER BY CHAR_LENGTH(originalUrl) DESC, arc_redirectID DESC"
 	);
 
@@ -81,20 +81,20 @@ function arc_redirect_tab($event, $step) {
 function arc_redirect_list($message = '')
 {
 	global $event;
-	
+
 	extract(gpsa(array('page')));
 
 	pagetop('arc_redirect',$message);
-	
+
 	$criteria = 1;
-	
+
 	$total = getCount('arc_redirect', $criteria);
-	
+
 	$limit = 25;
 	list($page, $offset, $numPages) = pager($total, $limit, $page);
-	
+
 	$sort_sql = 'arc_redirectID desc';
-		
+
 	$rs = safe_rows_start('*', 'arc_redirect', "$criteria order by $sort_sql limit $offset, $limit");
 
 	$statusCodes = array(
@@ -113,14 +113,14 @@ function arc_redirect_list($message = '')
 
 	$form .= eInput('arc_redirect').sInput('add');
 	$html .= form('<div class="plugin-column">' . $form . '</div>', '', '', 'post', 'edit-form');
-	
+
 	// Add a list of existing redirects
 	$html .= n . n . '<form action="index.php" id="arc_redirect_form" class="multi_edit_form" method="post" name="longform">';
 	$html .= startTable(null, null, 'txp-list');
-	
+
 	$html .= '<thead>' . tr(
 		hCell(
-			fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'), 
+			fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
 			'',
 			' title="Toggle all/none selected" class="multi-edit"'
 		)
@@ -130,7 +130,7 @@ function arc_redirect_list($message = '')
 		. hCell('Type')
 		. hCell('Manage')
 	) . '</thead>';
-	
+
 	while ($redirect = nextRow($rs))
 	{
 		$editLink = href(
@@ -147,7 +147,7 @@ function arc_redirect_list($message = '')
 			. td("$editLink <span> | </span> $redirectLink", 35, 'manage')
 		);
 	}
-	
+
 	$html .= endTable();
 
 	$methods = array(
@@ -157,25 +157,25 @@ function arc_redirect_list($message = '')
 	$html .= multi_edit($methods, 'arc_redirect', 'arc_redirect_multiedit');
 
 	$html .= '</form>';
-	
+
 	$html .= n . '<div id="'.$event.'_navigation" class="txp-navigation">'
 		. n . nav_form('arc_redirect', $page, $numPages, '', '', '', '', $total, $limit)
 		. n . '</div>';
-	
+
 	echo $html;
 
 	return;
-	
+
 }
 
 function arc_redirect_edit($message='')
 {
 	pagetop('arc_redirect',$message);
-	
+
 	$originalUrl = gps('originalUrl');
 	$redirectUrl = gps('redirectUrl');
 	$statusCode = gps('statusCode');
-	
+
 	if ($id=gps('id')) {
 		$id = doSlash($id);
 		$rs = safe_row('originalUrl,redirectUrl,statusCode', 'arc_redirect', "arc_redirectID = $id");
@@ -193,7 +193,7 @@ function arc_redirect_edit($message='')
 		'originalUrl' => 'Redirect from URL',
 		'redirectUrl' => 'Redirect to URL'
 	);
-	foreach ($fields as $key => $label) 
+	foreach ($fields as $key => $label)
 	{
 		$form .= '<p class="' . $key . '"><span class="edit-label"><label for="$key">' . $label . '</label></span>';
 		$form .= '<span class="edit-value">' . fInput('text', $key, $$key, '', '', '', '', '', $key) . '</span>';
@@ -211,16 +211,16 @@ function arc_redirect_edit($message='')
 	}
 	$form .= '</p>';
 	$html .= form('<div class="plugin-column"><div class="txp-edit">' . $form . '</div></div>', '', '', 'post', 'edit-form');
-	
+
 	echo $html;
-	
+
 }
 
 function arc_redirect_add()
 {
 	$originalUrl = ps('originalUrl');
 	$redirectUrl = ps('redirectUrl');
-	
+
 	if ($originalUrl === '' || $redirectUrl === '')
 	{
 		arc_redirect_edit('Unable to add new redirect');
@@ -228,15 +228,15 @@ function arc_redirect_add()
 	}
 
 	$statusCode = ps('statusCode') == 301 ? 301 : 302;
-	
+
 	// Strip final slash from original url
 	$originalUrl = rtrim($originalUrl, '/');
-	
+
 	$q = safe_insert(
 		"arc_redirect",
 		"originalUrl = '" . trim(doSlash($originalUrl)) . "', redirectUrl = '" . trim(doSlash($redirectUrl)) . "', statusCode = " . $statusCode
 	);
-	
+
 	if ($q)
 	{
 		$message = gTxt('Redirect added');
@@ -253,28 +253,28 @@ function arc_redirect_save()
 		arc_redirect_list('Unable to save redirect');
 		return;
 	}
-	
+
 	$originalUrl = ps('originalUrl');
 	$redirectUrl = ps('redirectUrl');
 	$statusCode = ps('statusCode');
-	
+
 	if ($originalUrl == '' || $redirectUrl == '' || empty($statusCode))
 	{
 		arc_redirect_edit('Unable to save redirect');
 		return;
 	}
-		
+
 	// Strip final slash from original url
 	$originalUrl = rtrim($originalUrl, '/');
-	
+
 	$id = doSlash($id);
-	
+
 	$rs = safe_update(
 		"arc_redirect",
 		"originalUrl    = '" . trim(doSlash($originalUrl)) . "',  redirectUrl = '" . trim(doSlash($redirectUrl)) . "',  statusCode = " . trim(doSlash($statusCode)) . "",
 		"arc_redirectID = $id"
 	);
-	
+
 	if ($rs)
 	{
 		$message = gTxt('Redirect updated');
@@ -285,20 +285,20 @@ function arc_redirect_save()
 
 function arc_redirect_multiedit() {
 	$selected = ps('selected');
-	
+
 	if (!$selected || !is_array($selected)) {
 		arc_redirect_list();
 		return;
 	}
-	
+
 	$method = ps('edit_method');
 	$changed = array();
-	
+
 	$message = '';
-	
+
 	switch ($method) {
 		case 'delete':
-			
+
 			foreach ($selected as $id) {
 				$id = doSlash($id);
 				if (safe_delete('arc_redirect', 'arc_redirectID = '.$id)) {
@@ -308,7 +308,7 @@ function arc_redirect_multiedit() {
 			$message = count($changed).' redirects deleted';
 			break;
 	}
-	
+
 	arc_redirect_list($message);
 }
 
@@ -391,7 +391,7 @@ h2. License
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Andy Carter
+Copyright (c) 2015 Andy Carter
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

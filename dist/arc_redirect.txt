@@ -1,4 +1,4 @@
-# arc_redirect v1.2.0
+# arc_redirect v1.2.1
 # Love redirects, hate 404s
 # Andy Carter
 # http://andy-carter.com/
@@ -10,7 +10,7 @@
 # ......................................................................
 
 YToxMTp7czo0OiJuYW1lIjtzOjEyOiJhcmNfcmVkaXJlY3QiO3M6NzoidmVyc2lvbiI7czo1
-OiIxLjIuMCI7czo2OiJhdXRob3IiO3M6MTE6IkFuZHkgQ2FydGVyIjtzOjEwOiJhdXRob3Jf
+OiIxLjIuMSI7czo2OiJhdXRob3IiO3M6MTE6IkFuZHkgQ2FydGVyIjtzOjEwOiJhdXRob3Jf
 dXJpIjtzOjIzOiJodHRwOi8vYW5keS1jYXJ0ZXIuY29tLyI7czoxMToiZGVzY3JpcHRpb24i
 O3M6MjU6IkxvdmUgcmVkaXJlY3RzLCBoYXRlIDQwNHMiO3M6NToib3JkZXIiO3M6MToiNSI7
 czo0OiJ0eXBlIjtzOjE6IjEiO3M6NToiZmxhZ3MiO3M6MToiMiI7czo0OiJoZWxwIjtzOjQ3
@@ -56,7 +56,7 @@ YWdlPC9hPi48L3A+CgoJPHA+VGhhbmtzIHRvIDxhIGhyZWY9Imh0dHA6Ly9vbGl2ZXJrZXIu
 Y28udWsvIj5PbGl2ZXIgS2VyPC9hPiBmb3IgZ2l2aW5nIG1lIHRoZSBpZGVhIGZvciB0aGlz
 IHBsdWdpbi48L3A+CgoJPGgyPkxpY2Vuc2U8L2gyPgoKCTxwPlRoZSA8c3BhbiBjbGFzcz0i
 Y2FwcyI+TUlUPC9zcGFuPiBMaWNlbnNlICg8c3BhbiBjbGFzcz0iY2FwcyI+TUlUPC9zcGFu
-Pik8L3A+CgoJPHA+Q29weXJpZ2h0ICYjMTY5OyAyMDE0IEFuZHkgQ2FydGVyPC9wPgoKCTxw
+Pik8L3A+CgoJPHA+Q29weXJpZ2h0ICYjMTY5OyAyMDE1IEFuZHkgQ2FydGVyPC9wPgoKCTxw
 PlBlcm1pc3Npb24gaXMgaGVyZWJ5IGdyYW50ZWQsIGZyZWUgb2YgY2hhcmdlLCB0byBhbnkg
 cGVyc29uIG9idGFpbmluZyBhIGNvcHkgb2YgdGhpcyBzb2Z0d2FyZSBhbmQgYXNzb2NpYXRl
 ZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgJiM4MjIwO1NvZnR3YXJlJiM4MjIxOyksIHRv
