@@ -137,7 +137,11 @@ function arc_redirect_list($message = '')
 			gTxt('edit'),
 			'?event=arc_redirect&amp;step=edit&amp;id=' . $redirect['arc_redirectID']
 		);
-		$redirectLink = href('Test', $redirect['originalUrl']);
+		$testUrl = $redirect['originalUrl'];
+		if (strpos($testUrl, '/') === 0) {
+		    $testUrl = hu.(ltrim($testUrl, '/'));
+		}
+		$redirectLink = href('Test', $testUrl);
 		$html .= tr(
 			td(fInput('checkbox', 'selected[]', $redirect['arc_redirectID']), '', 'multi-edit')
 			. td($redirect['arc_redirectID'], 20, 'id')
